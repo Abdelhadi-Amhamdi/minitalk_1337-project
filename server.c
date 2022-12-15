@@ -1,24 +1,32 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   server.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/12/15 15:57:57 by aamhamdi          #+#    #+#             */
+/*   Updated: 2022/12/15 17:49:59 by aamhamdi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "libc.h"
-#include "ft_printf.h"
 
-static unsigned char c;
-static int i ;
-char tab[100];
+struct server_data
+{
+    unsigned char c;
+    int i ;
+}   data;
 
 void handle_siguser1(int sig)
 {
-    if(sig == 30)
-        c = (c * 2) + 0;
-    else if(sig == 31)
-        c = (c * 2) + 1;
-    i++;
+
+    if (sig == 30)
+        data.c = (data.c * 2) + 0;
+    else if (sig == 31)
+        data.c = (data.c * 2) + 1;
+    data.i++;
 }
-// void handle_siguser2(int sig)
-// {
-//     c = (c * 2) + 1;
-//     i++;
-// }
 
 int main()
 {
@@ -27,25 +35,18 @@ int main()
     signal(SIGUSR1, handle_siguser1);
     signal(SIGUSR2, handle_siguser1);
 
-    int j = 0;
-
     while (1)
     {
         sleep(2);
-        ft_printf("%d",  i);
-        if (i == 8)
+        if (data.i == 8)
         {
-            // ft_printf("%c", c);
-            tab[j] = c;
-            if (!c)
+            if(data.c == 0)
             {
-                ft_printf("%s %d\n", tab, j );
-                j = -1;
-                i = 0;
+               printf("\n"); 
             }
-            c = 0 ;
-            i = 0;
-            j++;
+            printf("%c", data.c);
+            data.c = 0;
+            data.i = 0;
         }
     }
     return 0;
