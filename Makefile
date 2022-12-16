@@ -1,11 +1,15 @@
 SRC= client.c server.c
-name=minitalk
+name=minitalk.a
 EXC= client server
 
-all:$(name) 
+all:$(EXC)
 
-%:%.c
-	cc -Wall -Wextra -Weroor $< -o 
+%.:%.c
+	cc -Wall -Wextra -Werror $< 
 
-$(name): $(EXC)
-	ar -rc $(EXC)
+clean :
+	rm -f $(EXC)
+
+fclean: clean
+
+re : clean all
