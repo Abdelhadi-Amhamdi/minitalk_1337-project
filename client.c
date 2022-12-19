@@ -5,46 +5,40 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/15 15:56:58 by aamhamdi          #+#    #+#             */
-/*   Updated: 2022/12/15 18:37:49 by aamhamdi         ###   ########.fr       */
+/*   Created: 2022/12/18 21:17:19 by aamhamdi          #+#    #+#             */
+/*   Updated: 2022/12/18 21:17:19 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libc.h"
 
-char	*char_to_bin(char c)
-{
-	char	*char_bin;
-	int		n;
-	int		index;
+int i = 0;
+int len ;
 
-	n = 8;
-	index = 0;
-	char_bin = malloc(sizeof(char) * 9);
-	if (!char_bin)
-		return (NULL);
-	while (n--)
+void	send_char(char c, int id)
+{
+	int	bits;
+
+	bits = 8;
+	while (bits--)
 	{
-		char_bin[index] = (c >> n & 1) + '0';
-		index++;
+		if (c & 128)
+			kill(id, SIGUSR1);
+		else
+			kill(id, SIGUSR2);
+		c <<= 1;
+		pause();
+		usleep(10);
 	}
-	char_bin[index] = '\0';
-	return (char_bin);
 }
 
-void	send_char(char *bin, int id)
+void signal_handler(int sig)
 {
-	int		index;
-	
-	index = 0;
-	while (bin[index])
+	i++;
+	if(i == len * 8)
 	{
-		if (bin[index] == '0')
-			kill(id, SIGUSR1);
-		else if (bin[index] == '1')
-			kill(id, SIGUSR2);
-		usleep(100);
-		index++;
+		printf("message delevried !!!\n");
+		exit(0);
 	}
 }
 
@@ -54,22 +48,16 @@ int		main(int ac, char **av)
 	{
 		char *data = av[2];
 		int server_id = atoi(av[1]);
-
+		len = strlen(data);
 		int index = 0;
-		size_t size = strlen(data);
-		char *char_bin;
 
-		send_char(char_to_bin( size + 48), server_id);
-
+		signal(SIGUSR2, signal_handler);
 		while (data[index])
 		{
-			char_bin = char_to_bin(data[index]);
-			send_char(char_bin, server_id);
+			send_char(data[index], server_id);
 			index++;
 		}
-		
-		send_char(char_to_bin(0), server_id);
-		
+		send_char(0, server_id);
 	}
 	return 0;
 }
