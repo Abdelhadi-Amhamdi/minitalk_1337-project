@@ -5,17 +5,14 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/18 21:17:19 by aamhamdi          #+#    #+#             */
-/*   Updated: 2022/12/18 21:17:19 by aamhamdi         ###   ########.fr       */
+/*   Created: 2022/12/20 19:17:38 by aamhamdi          #+#    #+#             */
+/*   Updated: 2022/12/20 19:21:54 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libc.h"
 
-int i = 0;
-int len ;
-
-void	send_char(char c, int id)
+void	send_char(char c, int server_id, int buffer_length)
 {
 	int	bits;
 
@@ -23,41 +20,38 @@ void	send_char(char c, int id)
 	while (bits--)
 	{
 		if (c & 128)
-			kill(id, SIGUSR1);
+			kill(server_id, SIGUSR1);
 		else
-			kill(id, SIGUSR2);
+			kill(server_id, SIGUSR2);
 		c <<= 1;
-		pause();
-		usleep(10);
+		usleep(300);
 	}
 }
 
-void signal_handler(int sig)
+void	signal_handler(int signal_type)
 {
-	i++;
-	if(i == len * 8)
-	{
+	if (signal_type == SIGUSR2)
 		printf("message delevried !!!\n");
-		exit(0);
-	}
 }
 
-int		main(int ac, char **av)
+int	main(int ac, char **av)
 {
+	char	*data;
+	int		server_id;
+	int		data_length;
+
 	if (ac == 3)
 	{
-		char *data = av[2];
-		int server_id = atoi(av[1]);
-		len = strlen(data);
-		int index = 0;
-
+		data = av[2];
+		server_id = atoi(av[1]);
+		data_length = strlen(data);
 		signal(SIGUSR2, signal_handler);
-		while (data[index])
+		while (*data)
 		{
-			send_char(data[index], server_id);
-			index++;
+			send_char(*data, server_id, (data_length + 1));
+			data++;
 		}
-		send_char(0, server_id);
+		send_char(0, server_id, (data_length + 1));
 	}
-	return 0;
+	return (0);
 }
