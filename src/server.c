@@ -6,11 +6,12 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 15:57:57 by aamhamdi          #+#    #+#             */
-/*   Updated: 2022/12/20 19:15:15 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2023/01/26 22:04:14 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libc.h"
+#include "mini_talk.h"
 
 void	signals_handler(int signal_type, siginfo_t *info)
 {
@@ -20,6 +21,12 @@ void	signals_handler(int signal_type, siginfo_t *info)
 
 	if (!client_pid)
 		client_pid = info->si_pid;
+	if(client_pid != info->si_pid)
+	{
+		c = 0;
+		i = 0;
+		client_pid = info->si_pid;
+	}
 	if (signal_type == SIGUSR1)
 		c = (c * 2) + 1;
 	else if (signal_type == SIGUSR2)
@@ -31,7 +38,6 @@ void	signals_handler(int signal_type, siginfo_t *info)
 		if (!c)
 		{
 			write(1, "\n", 1);
-			kill(client_pid, SIGUSR2);
 			client_pid = 0;
 		}
 		i = 0;
@@ -39,14 +45,15 @@ void	signals_handler(int signal_type, siginfo_t *info)
 	}
 }
 
-int	main(int ac, char **av)
+int	main()
 {
 	struct sigaction	action;
 
-	(void)ac;
-	(void)av;
-	printf("SERVER PID : %d\n", getpid());
-	action.sa_handler = (void *)signals_handler;
+	ft_putstr_fd("SERVER PID: ", 1);
+	ft_putnbr_fd(getpid(), 1);
+	ft_putendl_fd("", 1);
+	action.sa_flags = SA_RESTART;
+	action.sa_sigaction = (void *)signals_handler;
 	while (1)
 	{
 		sigaction(SIGUSR1, &action, NULL);

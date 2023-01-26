@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client.c                                           :+:      :+:    :+:   */
+/*   client_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/20 19:17:38 by aamhamdi          #+#    #+#             */
-/*   Updated: 2022/12/20 19:21:54 by aamhamdi         ###   ########.fr       */
+/*   Created: 2023/01/26 22:30:36 by aamhamdi          #+#    #+#             */
+/*   Updated: 2023/01/26 22:31:38 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libc.h"
+#include "mini_talk_bonus.h"
 
-void	send_char(char c, int server_id, int buffer_length)
+void	send_char(char c, int server_id)
 {
 	int	bits;
 
@@ -24,34 +24,44 @@ void	send_char(char c, int server_id, int buffer_length)
 		else
 			kill(server_id, SIGUSR2);
 		c <<= 1;
-		usleep(300);
+		usleep(600);
 	}
 }
 
-void	signal_handler(int signal_type)
+char *check_valid_pid(char *pid)
 {
-	if (signal_type == SIGUSR2)
-		printf("message delevried !!!\n");
+	int index;
+
+	index = 0 ;
+	while(pid[index])
+	{
+		if(!ft_isdigit(pid[index]))
+			return (0);
+	}
+	return (pid);
 }
+
 
 int	main(int ac, char **av)
 {
 	char	*data;
 	int		server_id;
-	int		data_length;
 
 	if (ac == 3)
 	{
 		data = av[2];
-		server_id = atoi(av[1]);
-		data_length = strlen(data);
-		signal(SIGUSR2, signal_handler);
+		server_id = ft_atoi(av[1]);
+		if(server_id < 1)
+		{
+			ft_putendl_fd("Error", 2);
+			return (0);
+		}
 		while (*data)
 		{
-			send_char(*data, server_id, (data_length + 1));
+			send_char(*data, server_id);
 			data++;
 		}
-		send_char(0, server_id, (data_length + 1));
+		send_char(0, server_id);
 	}
 	return (0);
 }
