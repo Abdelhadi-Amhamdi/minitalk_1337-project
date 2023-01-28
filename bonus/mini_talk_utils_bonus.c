@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 12:16:32 by aamhamdi          #+#    #+#             */
-/*   Updated: 2023/01/26 22:31:26 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2023/01/28 21:38:37 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,13 @@ size_t	ft_strlen(const char *tab)
 	while (tab[i])
 		i++;
 	return (i);
+}
+
+int	ft_isdigit(int c)
+{
+	if (!(c >= '0' && c <= '9'))
+		return (0);
+	return (1);
 }
 
 static int	check_if_overflow(long prev, long res)
