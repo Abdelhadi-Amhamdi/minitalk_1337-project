@@ -6,12 +6,14 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 19:17:38 by aamhamdi          #+#    #+#             */
-/*   Updated: 2023/01/26 22:21:01 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2023/01/28 22:58:38 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libc.h"
 #include "mini_talk.h"
+
+int interval = 100;
 
 void	send_char(char c, int server_id)
 {
@@ -25,8 +27,10 @@ void	send_char(char c, int server_id)
 		else
 			kill(server_id, SIGUSR2);
 		c <<= 1;
-		usleep(600);
+		usleep(interval);
 	}
+	if(interval < 1000)
+		interval++;
 }
 
 char *check_valid_pid(char *pid)
