@@ -6,22 +6,21 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 15:57:57 by aamhamdi          #+#    #+#             */
-/*   Updated: 2023/01/26 22:04:14 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2023/01/29 10:51:02 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libc.h"
 #include "mini_talk.h"
 
-void	signals_handler(int signal_type, siginfo_t *info)
+void	signals_handler(int signal_type, siginfo_t *info, void *context)
 {
 	static int				client_pid;
 	static int				i;
 	static unsigned char	c;
 
-	if (!client_pid)
-		client_pid = info->si_pid;
-	if(client_pid != info->si_pid)
+	(void)context;
+	if (client_pid != info->si_pid)
 	{
 		c = 0;
 		i = 0;
@@ -35,17 +34,12 @@ void	signals_handler(int signal_type, siginfo_t *info)
 	if (i == 8)
 	{
 		write(1, &c, 1);
-		if (!c)
-		{
-			write(1, "\n", 1);
-			client_pid = 0;
-		}
 		i = 0;
 		c = 0;
 	}
 }
 
-int	main()
+int	main(void)
 {
 	struct sigaction	action;
 
@@ -53,7 +47,7 @@ int	main()
 	ft_putnbr_fd(getpid(), 1);
 	ft_putendl_fd("", 1);
 	action.sa_flags = SA_RESTART;
-	action.sa_sigaction = (void *)signals_handler;
+	action.sa_sigaction = signals_handler;
 	while (1)
 	{
 		sigaction(SIGUSR1, &action, NULL);
