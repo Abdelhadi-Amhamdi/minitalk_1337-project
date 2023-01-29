@@ -6,105 +6,101 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:29:57 by aamhamdi          #+#    #+#             */
-/*   Updated: 2023/01/28 22:30:50 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2023/01/29 13:09:25 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini_talk_bonus.h"
 
-int calc_nbytes(unsigned char c)
+int	calc_nbytes(unsigned char byte)
 {
-	c = c >> 4;
-	if(c == 8)
+	byte = byte >> 4;
+	if (byte == 8)
 		return (1);
-	else if(c == 12)
+	else if (byte == 12)
 		return (2);
-	else if(c == 14)
+	else if (byte == 14)
 		return (3);
-	else if(c == 15)
+	else if (byte == 15)
 		return (4);
 	return (0);
 }
 
-void	signals_handler(int signal_type, siginfo_t *info)
+void	ft_clean(char **unicode, int *index, int *nbyte)
 {
-	static int				client_pid;
-	static int				i;
-	static unsigned char c;
-	static char *unicode;
-	static int is_unicode;
-	static int nbyte;
-	static int index;
+	if (*unicode)
+		free(*unicode);
+	*unicode = NULL;
+	*index = 0;
+	*nbyte = 0;
+}
 
-	if (!client_pid)
-		client_pid = info->si_pid;
-	if(client_pid != info->si_pid)
+void	handle_unicode(unsigned char byte)
+{
+	static char				*unicode;
+	static int				nbyte;
+	static int				index;
+
+	if (!byte)
+		ft_clean(&unicode, &index, &nbyte);
+	else if (byte < 128 && !nbyte)
+		write(1, &byte, 1);
+	else if (byte > 127 && !nbyte)
 	{
-		c = 0;
-		i = 0;
-		if(unicode)
-		{
-			free(unicode);
-			unicode = NULL;
-		}
-		index = 0;
-		is_unicode = 0;
-		nbyte = 0;	
-		client_pid = info->si_pid;
+		nbyte = (calc_nbytes(byte) - 1);
+		unicode = calloc((nbyte + 2), sizeof(char));
+		unicode[index++] = byte;
 	}
-	if (signal_type == SIGUSR1)
-		c = (c * 2) + 1;
-	else if (signal_type == SIGUSR2)
-		c = (c * 2);
-	i++;
-	if (i == 8)
+	else
 	{
-		if(c < 128 && !is_unicode)
+		unicode[index++] = byte;
+		nbyte--;
+		if (!nbyte)
 		{
-			write(1, &c, 1);
-			if (!c)
-				client_pid = 0;
+			ft_putstr_fd(unicode, 1);
+			ft_clean(&unicode, &index, &nbyte);
 		}
-		else if(c > 127 && !is_unicode)
-		{	
-			nbyte = calc_nbytes(c);
-			unicode = calloc(nbyte + 1 , sizeof(char));
-			unicode[index] = c;
-			index++;
-			is_unicode = 1;
-			nbyte--;
-		}
-		else
-		{
-			unicode[index] = c;
-			index++;
-			nbyte--;
-			if(!nbyte)
-			{
-				ft_putstr_fd(unicode, 1);
-				unicode[index] = 0;
-				is_unicode = 0;
-				unicode = 0;
-				index = 0;
-				free(unicode);
-				unicode = NULL;
-			}
-		}
-		i = 0;
-		c = 0;
 	}
 }
 
-int	main()
+void	signals_handler(int signal_type, siginfo_t *info, void *context)
+{
+	static int				client_pid;
+	static int				index;
+	static unsigned char	byte;
+
+	(void)context;
+	if (client_pid != info->si_pid)
+	{
+		byte = 0;
+		index = 0;
+		handle_unicode(0);
+		client_pid = info->si_pid;
+	}
+	if (signal_type == SIGUSR1)
+		byte = (byte * 2) + 1;
+	else if (signal_type == SIGUSR2)
+		byte = (byte * 2);
+	if (++index == 8)
+	{
+		if (!byte)
+			kill(client_pid, SIGUSR2);
+		else
+			handle_unicode(byte);
+		index = 0;
+		byte = 0;
+	}
+}
+
+int	main(void)
 {
 	struct sigaction	action;
 
 	ft_putstr_fd("SERVER PID: ", 1);
-	printf("%d\n", getpid());
-	// ft_putnbr_fd(getpid(), 1);
+	ft_putnbr_fd(getpid(), 1);
 	ft_putendl_fd("", 1);
 	action.sa_flags = SA_RESTART;
-	action.sa_sigaction = (void *)signals_handler;
+	action.sa_sigaction = signals_handler;
 	while (1)
 	{
 		sigaction(SIGUSR1, &action, NULL);
