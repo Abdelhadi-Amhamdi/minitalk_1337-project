@@ -6,13 +6,14 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 12:22:50 by aamhamdi          #+#    #+#             */
-/*   Updated: 2023/01/29 10:52:20 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2023/01/29 13:06:53 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINI_TALK_H
 # define MINI_TALK_H
 # include <unistd.h>
+# include <signal.h>
 
 int		ft_atoi(const char *s);
 void	ft_putendl_fd(char *s, int fd);
