@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:30:36 by aamhamdi          #+#    #+#             */
-/*   Updated: 2023/01/29 11:57:40 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2023/01/30 22:21:13 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,12 @@ void	send_char(char c, int server_id, int interval)
 	while (bits--)
 	{
 		if (c & 128)
-			kill(server_id, SIGUSR1);
-		else
-			kill(server_id, SIGUSR2);
+		{
+			if (kill(server_id, SIGUSR1) == -1)
+				exit (1);
+		}
+		else if (kill(server_id, SIGUSR2) == -1)
+			exit(1);
 		c <<= 1;
 		usleep(interval);
 	}
@@ -54,7 +57,7 @@ int	main(int ac, char **av)
 	int		server_id;
 	int		interval;
 
-	interval = 300;
+	interval = 100;
 	signal(SIGUSR2, handler);
 	if (ac == 3)
 	{

@@ -6,20 +6,16 @@
 #    By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/26 21:43:09 by aamhamdi          #+#    #+#              #
-#    Updated: 2023/01/29 13:13:56 by aamhamdi         ###   ########.fr        #
+#    Updated: 2023/01/30 22:14:31 by aamhamdi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-# paths
 SRCSF  = src/
-OBJSF  = build/
 B_SRCP = bonus/
 
-# headers
 S_HEADER=mini_talk.h
 B_HEADER=mini_talk_bonus.h
 
-# names
 CLIENT = client
 SERVER = server
 
@@ -43,33 +39,20 @@ C_SRCS_B = $(addprefix $(B_SRCP), $(C_SRC_B))
 U_SRCS_B = $(addprefix $(B_SRCP), $(U_SRC_B))
 S_SRCS_B = $(addprefix $(B_SRCP), $(S_SRC_B))
 
-# objs
-C_OBJ  = $(C_SRC:.c=.o)
-S_OBJ  = $(S_SRC:.c=.o)
-U_OBJ  = $(U_SRC:.c=.o)
+C_OBJS  = $(C_SRCS:.c=.o)
+S_OBJS  = $(S_SRCS:.c=.o)
+U_OBJS  = $(U_SRCS:.c=.o)
 
-C_OBJ_B  = $(C_SRC_B:.c=.o)
-S_OBJ_B  = $(S_SRC_B:.c=.o)
-U_OBJ_B  = $(U_SRC_B:.c=.o)
-
-C_OBJS_B = $(addprefix $(OBJSF), $(C_OBJ_B))
-U_OBJS_B = $(addprefix $(OBJSF), $(U_OBJ_B))
-S_OBJS_B = $(addprefix $(OBJSF), $(S_OBJ_B))
-
-C_OBJS = $(addprefix $(OBJSF), $(C_OBJ))
-U_OBJS = $(addprefix $(OBJSF), $(U_OBJ))
-S_OBJS = $(addprefix $(OBJSF), $(S_OBJ))
-
+C_OBJS_B  = $(C_SRCS_B:.c=.o)
+S_OBJS_B  = $(S_SRCS_B:.c=.o)
+U_OBJS_B  = $(U_SRCS_B:.c=.o)
 
 all:$(SERVER) $(CLIENT)
 
-$(OBJSF):
-	mkdir -p $(OBJSF)
-
-$(OBJSF)%.o:$(B_SRCP)%.c $(OBJSF) $(B_SRCP)$(B_HEADER)
+%.o:$(B_SRCP)%.c $(B_SRCP)$(B_HEADER)
 	cc -Wall -Wextra -Werror -c $< -o $@
 
-$(OBJSF)%.o:$(SRCSF)%.c $(OBJSF) $(SRCSF)$(S_HEADER)
+%.o:$(SRCSF)%.c $(SRCSF)$(S_HEADER)
 	cc -Wall -Wextra -Werror -c $< -o $@
 
 $(CLIENT): $(C_OBJS) $(U_OBJS) 
@@ -80,15 +63,14 @@ $(SERVER): $(S_OBJS) $(U_OBJS)
 
 bonus: $(SERVER_B) $(CLIENT_B)
 
-
 $(CLIENT_B): $(C_OBJS_B) $(U_OBJS_B)
-	cc  $(C_OBJS_B) $(U_OBJS_B) -o $@
+	cc -Wall -Wextra -Werror  $(C_OBJS_B) $(U_OBJS_B) -o $@
 
 $(SERVER_B): $(S_OBJS_B) $(U_OBJS_B)
-	cc  $(S_OBJS_B) $(U_OBJS_B) -o $@
+	cc -Wall -Wextra -Werror $(S_OBJS_B) $(U_OBJS_B) -o $@
 	
 clean :
-	rm -rf $(OBJSF)
+	rm -f $(C_OBJS) $(S_OBJS) $(U_OBJS) $(C_OBJS_B) $(S_OBJS_B) $(U_OBJS_B)
 
 fclean: clean
 	rm -f $(CLIENT) $(SERVER) $(SERVER_B) $(CLIENT_B)

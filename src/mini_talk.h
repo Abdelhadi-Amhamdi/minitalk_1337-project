@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 12:22:50 by aamhamdi          #+#    #+#             */
-/*   Updated: 2023/01/29 13:06:53 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2023/01/30 13:47:21 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MINI_TALK_H
 # include <unistd.h>
 # include <signal.h>
+# include <stdlib.h>
 
 int		ft_atoi(const char *s);
 void	ft_putendl_fd(char *s, int fd);

@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 12:16:32 by aamhamdi          #+#    #+#             */
-/*   Updated: 2023/01/29 12:56:45 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2023/01/30 22:08:06 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ int	ft_atoi(const char *s)
 	long	result;
 	long	prev;
 
+	if (!s)
+		return (0);
 	result = 0;
 	sign = 1;
 	s = trim_white_space(s, &sign);
@@ -48,4 +50,33 @@ int	ft_atoi(const char *s)
 		s++;
 	}
 	return (result * sign);
+}
+
+void	*ft_calloc(size_t count, size_t size)
+{
+	void	*p;
+
+	if (count == 0 || size == 0)
+	{
+		count = 1;
+		size = 1;
+	}
+	p = malloc(size * count);
+	if (!p)
+		return (0);
+	ft_memset(p, 0, (count * size));
+	return (p);
+}
+
+void	*ft_memset(void *dest, int ch, size_t count)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < count)
+	{
+		((unsigned char *)dest)[i] = (unsigned char)ch;
+		i++;
+	}
+	return (dest);
 }

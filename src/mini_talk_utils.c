@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 12:16:32 by aamhamdi          #+#    #+#             */
-/*   Updated: 2023/01/29 10:55:23 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2023/01/30 21:56:02 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,6 @@
 int	ft_isdigit(int c)
 {
 	if (!(c >= '0' && c <= '9'))
-		return (0);
-	return (1);
-}
-
-static int	check_if_overflow(long prev, long res)
-{
-	if (res / 10 == prev)
 		return (0);
 	return (1);
 }
@@ -45,6 +38,8 @@ int	ft_atoi(const char *s)
 	long	result;
 	long	prev;
 
+	if (!s)
+		return (0);
 	result = 0;
 	sign = 1;
 	s = trim_white_space(s, &sign);
@@ -52,12 +47,6 @@ int	ft_atoi(const char *s)
 	{
 		prev = result;
 		result = (result * 10) + (*s - 48);
-		if (check_if_overflow(prev, result) == 1)
-		{
-			if (sign == -1)
-				return (0);
-			return (-1);
-		}
 		s++;
 	}
 	return (result * sign);

@@ -6,11 +6,10 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 15:57:57 by aamhamdi          #+#    #+#             */
-/*   Updated: 2023/01/29 10:51:02 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2023/01/30 21:47:22 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libc.h"
 #include "mini_talk.h"
 
 void	signals_handler(int signal_type, siginfo_t *info, void *context)
@@ -46,13 +45,11 @@ int	main(void)
 	ft_putstr_fd("SERVER PID: ", 1);
 	ft_putnbr_fd(getpid(), 1);
 	ft_putendl_fd("", 1);
-	action.sa_flags = SA_RESTART;
+	action.sa_flags = SA_SIGINFO;
 	action.sa_sigaction = signals_handler;
+	sigaction(SIGUSR1, &action, NULL);
+	sigaction(SIGUSR2, &action, NULL);
 	while (1)
-	{
-		sigaction(SIGUSR1, &action, NULL);
-		sigaction(SIGUSR2, &action, NULL);
 		pause();
-	}
 	return (0);
 }

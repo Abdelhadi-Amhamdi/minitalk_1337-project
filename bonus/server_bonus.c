@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:29:57 by aamhamdi          #+#    #+#             */
-/*   Updated: 2023/01/29 13:09:25 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2023/01/30 22:08:49 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	handle_unicode(unsigned char byte)
 	else if (byte > 127 && !nbyte)
 	{
 		nbyte = (calc_nbytes(byte) - 1);
-		unicode = calloc((nbyte + 2), sizeof(char));
+		unicode = ft_calloc((nbyte + 2), sizeof(char));
 		unicode[index++] = byte;
 	}
 	else
@@ -83,8 +83,8 @@ void	signals_handler(int signal_type, siginfo_t *info, void *context)
 		byte = (byte * 2);
 	if (++index == 8)
 	{
-		if (!byte)
-			kill(client_pid, SIGUSR2);
+		if (!byte && kill(client_pid, SIGUSR2) == -1)
+			exit (1);
 		else
 			handle_unicode(byte);
 		index = 0;

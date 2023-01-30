@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:31:17 by aamhamdi          #+#    #+#             */
-/*   Updated: 2023/01/29 11:58:21 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2023/01/30 22:22:01 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,5 +21,7 @@ int		ft_atoi(const char *s);
 void	ft_putendl_fd(char *s, int fd);
 int		ft_isdigit(int c);
 void	ft_putnbr_fd(int x, int fd);
+void	*ft_memset(void *dest, int ch, size_t count);
+void	*ft_calloc(size_t count, size_t size);
 
 #endif
