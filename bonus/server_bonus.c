@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:29:57 by aamhamdi          #+#    #+#             */
-/*   Updated: 2023/01/31 10:18:12 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2023/01/31 10:25:28 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	ft_clean(char *unicode, int *index, int *nbyte)
 {
 	if (unicode)
 		free(unicode);
-	*unicode = NULL;
+	unicode = NULL;
 	*index = 0;
 	*nbyte = 0;
 }
@@ -58,7 +58,7 @@ void	handle_unicode(unsigned char byte)
 		if (!nbyte)
 		{
 			ft_putstr_fd(unicode, 1);
-			ft_clean(&unicode, &index, &nbyte);
+			ft_clean(unicode, &index, &nbyte);
 		}
 	}
 }
