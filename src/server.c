@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 15:57:57 by aamhamdi          #+#    #+#             */
-/*   Updated: 2023/01/30 21:47:22 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2023/01/31 10:13:58 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 void	signals_handler(int signal_type, siginfo_t *info, void *context)
 {
-	static int				client_pid;
-	static int				i;
-	static unsigned char	c;
+	static int	client_pid;
+	static int	i;
+	static char	c;
 
 	(void)context;
 	if (client_pid != info->si_pid)

@@ -6,13 +6,15 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:31:17 by aamhamdi          #+#    #+#             */
-/*   Updated: 2023/01/30 22:22:01 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2023/01/31 10:20:50 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINI_TALK_BONUS_H
 # define MINI_TALK_BONUS_H
-# include "libc.h"
+# include <unistd.h>
+# include <signal.h>
+# include <stdlib.h>
 
 size_t	ft_strlen(const char *tab);
 void	ft_putchar_fd(char c, int fd);

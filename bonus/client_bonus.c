@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:30:36 by aamhamdi          #+#    #+#             */
-/*   Updated: 2023/01/30 22:21:13 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2023/01/31 10:19:37 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int	main(int ac, char **av)
 		server_id = ft_atoi(check_valid_pid(av[1]));
 		if (server_id < 1)
 		{
-			ft_putendl_fd("Error", 2);
+			ft_putendl_fd("invalid pid", 2);
 			return (0);
 		}
 		while (*data)

@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:29:57 by aamhamdi          #+#    #+#             */
-/*   Updated: 2023/01/30 22:08:49 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2023/01/31 10:18:12 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,10 @@ int	calc_nbytes(unsigned char byte)
 	return (0);
 }
 
-void	ft_clean(char **unicode, int *index, int *nbyte)
+void	ft_clean(char *unicode, int *index, int *nbyte)
 {
-	if (*unicode)
-		free(*unicode);
+	if (unicode)
+		free(unicode);
 	*unicode = NULL;
 	*index = 0;
 	*nbyte = 0;
@@ -42,7 +42,7 @@ void	handle_unicode(unsigned char byte)
 	static int				index;
 
 	if (!byte)
-		ft_clean(&unicode, &index, &nbyte);
+		ft_clean(unicode, &index, &nbyte);
 	else if (byte < 128 && !nbyte)
 		write(1, &byte, 1);
 	else if (byte > 127 && !nbyte)
@@ -99,13 +99,11 @@ int	main(void)
 	ft_putstr_fd("SERVER PID: ", 1);
 	ft_putnbr_fd(getpid(), 1);
 	ft_putendl_fd("", 1);
-	action.sa_flags = SA_RESTART;
+	action.sa_flags = SA_SIGINFO;
 	action.sa_sigaction = signals_handler;
+	sigaction(SIGUSR1, &action, NULL);
+	sigaction(SIGUSR2, &action, NULL);
 	while (1)
-	{
-		sigaction(SIGUSR1, &action, NULL);
-		sigaction(SIGUSR2, &action, NULL);
 		pause();
-	}
 	return (0);
 }
