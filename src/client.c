@@ -6,7 +6,7 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 19:17:38 by aamhamdi          #+#    #+#             */
-/*   Updated: 2023/02/02 09:36:54 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2023/02/02 09:48:13 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int	main(int ac, char **av)
 		{
 			send_char(*data, server_id, interval);
 			data++;
-			if (interval < 500)
+			if (interval < 800)
 				interval++;
 		}
 	}
