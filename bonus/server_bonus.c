@@ -6,11 +6,12 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:29:57 by aamhamdi          #+#    #+#             */
-/*   Updated: 2023/01/31 10:25:28 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2023/02/01 19:00:54 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini_talk_bonus.h"
+#include "libc.h"
 
 int	calc_nbytes(unsigned char byte)
 {
@@ -26,11 +27,11 @@ int	calc_nbytes(unsigned char byte)
 	return (0);
 }
 
-void	ft_clean(char *unicode, int *index, int *nbyte)
+void	ft_clean(char **unicode, int *index, int *nbyte)
 {
-	if (unicode)
-		free(unicode);
-	unicode = NULL;
+	if (*unicode)
+		free(*unicode);
+	*unicode = NULL;
 	*index = 0;
 	*nbyte = 0;
 }
@@ -42,7 +43,7 @@ void	handle_unicode(unsigned char byte)
 	static int				index;
 
 	if (!byte)
-		ft_clean(unicode, &index, &nbyte);
+		ft_clean(&unicode, &index, &nbyte);
 	else if (byte < 128 && !nbyte)
 		write(1, &byte, 1);
 	else if (byte > 127 && !nbyte)
@@ -58,7 +59,7 @@ void	handle_unicode(unsigned char byte)
 		if (!nbyte)
 		{
 			ft_putstr_fd(unicode, 1);
-			ft_clean(unicode, &index, &nbyte);
+			ft_clean(&unicode, &index, &nbyte);
 		}
 	}
 }
@@ -83,10 +84,10 @@ void	signals_handler(int signal_type, siginfo_t *info, void *context)
 		byte = (byte * 2);
 	if (++index == 8)
 	{
-		if (!byte && kill(client_pid, SIGUSR2) == -1)
-			exit (1);
-		else
+		if (byte)
 			handle_unicode(byte);
+		else if (!byte && kill(client_pid, SIGUSR2) == -1)
+			exit (1);
 		index = 0;
 		byte = 0;
 	}

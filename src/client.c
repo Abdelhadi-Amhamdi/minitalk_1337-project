@@ -6,12 +6,11 @@
 /*   By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 19:17:38 by aamhamdi          #+#    #+#             */
-/*   Updated: 2023/01/30 21:57:13 by aamhamdi         ###   ########.fr       */
+/*   Updated: 2023/02/02 09:36:54 by aamhamdi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini_talk.h"
-#include "libc.h"
 
 void	send_char(char c, int server_id, int interval)
 {
@@ -66,7 +65,7 @@ int	main(int ac, char **av)
 		{
 			send_char(*data, server_id, interval);
 			data++;
-			if (interval < 1000)
+			if (interval < 500)
 				interval++;
 		}
 	}

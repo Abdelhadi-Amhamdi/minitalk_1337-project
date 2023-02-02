@@ -6,7 +6,7 @@
 #    By: aamhamdi <aamhamdi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/26 21:43:09 by aamhamdi          #+#    #+#              #
-#    Updated: 2023/01/30 22:14:31 by aamhamdi         ###   ########.fr        #
+#    Updated: 2023/02/02 09:34:42 by aamhamdi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,8 @@ SERVER = server
 CLIENT_B = client_bonus
 SERVER_B = server_bonus
 
-# srcs
+FLAGS = -Wall -Wextra -Werror
+
 C_SRC  = client.c
 S_SRC  = server.c
 U_SRC  = mini_talk_utils.c mini_talk_utils2.c
@@ -49,13 +50,13 @@ U_OBJS_B  = $(U_SRCS_B:.c=.o)
 
 all:$(SERVER) $(CLIENT)
 
-%.o:$(B_SRCP)%.c $(B_SRCP)$(B_HEADER)
-	cc -Wall -Wextra -Werror -c $< -o $@
+$(B_SRCP)%.o:$(B_SRCP)%.c $(B_SRCP)$(B_HEADER)
+	cc $(FLAGS) -c $< -o $@
 
-%.o:$(SRCSF)%.c $(SRCSF)$(S_HEADER)
-	cc -Wall -Wextra -Werror -c $< -o $@
+$(SRCSF)%.o:$(SRCSF)%.c $(SRCSF)$(S_HEADER)
+	cc $(FLAGS) -c $< -o $@
 
-$(CLIENT): $(C_OBJS) $(U_OBJS) 
+$(CLIENT): $(C_OBJS) $(U_OBJS)
 	cc $(C_OBJS) $(U_OBJS) -o $@
 
 $(SERVER): $(S_OBJS) $(U_OBJS)
@@ -64,10 +65,10 @@ $(SERVER): $(S_OBJS) $(U_OBJS)
 bonus: $(SERVER_B) $(CLIENT_B)
 
 $(CLIENT_B): $(C_OBJS_B) $(U_OBJS_B)
-	cc -Wall -Wextra -Werror  $(C_OBJS_B) $(U_OBJS_B) -o $@
+	cc $(FLAGS)  $(C_OBJS_B) $(U_OBJS_B) -o $@
 
 $(SERVER_B): $(S_OBJS_B) $(U_OBJS_B)
-	cc -Wall -Wextra -Werror $(S_OBJS_B) $(U_OBJS_B) -o $@
+	cc $(FLAGS) $(S_OBJS_B) $(U_OBJS_B) -o $@
 	
 clean :
 	rm -f $(C_OBJS) $(S_OBJS) $(U_OBJS) $(C_OBJS_B) $(S_OBJS_B) $(U_OBJS_B)
